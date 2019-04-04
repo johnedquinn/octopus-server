@@ -88,7 +88,7 @@ echo
 cowsay -W 72 <<EOF
 On another machine, please run:
 
-    valgrind --leak-check=full ./spidey -r ~pbui/pub/www -p PORT -c MODE
+    valgrind --leak-check=full ./bin/spidey -r ~pbui/pub/www -p PORT -c MODE
 
 - Where PORT is a number between 9000 - 9999
 
