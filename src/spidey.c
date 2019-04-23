@@ -9,10 +9,10 @@
 #include <unistd.h>
 
 /* Global Variables */
-char *Port	      = "9898";
-char *MimeTypesPath   = "/etc/mime.types";
-char *DefaultMimeType = "text/plain";
-char *RootPath	      = "www";
+char * Port	      = "9898";
+char * MimeTypesPath   = "/etc/mime.types";
+char * DefaultMimeType = "text/plain";
+char * RootPath	      = "www";
 
 /**
  * Display usage message and exit with specified status code.
@@ -43,16 +43,16 @@ void usage(const char *progname, int status) {
  * This should set the mode, MimeTypesPath, DefaultMimeType, Port, and RootPath
  * if specified.
  */
-bool parse_options(int argc, char *argv[], ServerMode *mode) {
+bool parse_options(int argc, char * argv [], ServerMode * mode) {
     int argind = 1;
     while (argind < argc && strlen(argv[argind]) > 1 && argv[argind][0] == '-') {
         char *arg = argv[argind++];
     	switch (arg[1]) {
 	    case 'c':
 	    	if (streq(argv[argind], "single")) {
-	    	    *mode = SINGLE;
+	    	    * mode = SINGLE;
                 } else if (streq(argv[argind], "forking")) {
-	    	    *mode = FORKING;
+	    	    * mode = FORKING;
 	    	} else {
 	    	    return false;
 	    	}
@@ -85,12 +85,14 @@ bool parse_options(int argc, char *argv[], ServerMode *mode) {
 /**
  * Parses command line options and starts appropriate server
  **/
-int main(int argc, char *argv[]) {
+int main(int argc, char * argv []) {
     ServerMode mode;
 
     /* Parse command line options */
+    parse_options(argc, argv, &mode);
 
     /* Listen to server socket */
+    //
 
     /* Determine real RootPath */
     log("Listening on port %s", Port);
