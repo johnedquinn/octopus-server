@@ -4,7 +4,9 @@ This is the [Final Project] for [CSE 20289 Systems Programming (Spring 2019)].
 
 ## Members
 
-- Domer McDomerson (dmcdomer@nd.edu)
+- John Quinn (jquinn13@nd.edu)
+- Stephanie Keene (skeene@nd.edu)
+- Emma Ascolese (eascoles@nd.edu)
 
 ## Demonstration
 
