@@ -32,8 +32,12 @@ Request * accept_request(int sfd) {
     struct sockaddr raddr;
     socklen_t rlen = sizeof(struct sockaddr);
 
+    /* Initialize the headers list */
+    //r->headers.name = NULL;
+    r->headers = calloc(1, sizeof(Header));
+
     /* Allocate request struct (zeroed) */
-    //this is the first line of the function 
+    //this is the first line of the function
 
     /* Accept a client */
     r->fd = accept(sfd, &raddr, &rlen);
@@ -44,7 +48,7 @@ Request * accept_request(int sfd) {
     /* Lookup client information */
     if(getnameinfo(&raddr, rlen, &r->host[NI_MAXHOST], sizeof(r->host[NI_MAXHOST]), &r->port[NI_MAXHOST], sizeof(r->port[NI_MAXHOST]), NI_NUMERICHOST|NI_NUMERICSERV) != 0){
         fprintf(stderr, "Unable to get client info: %s\n", strerror(errno));
-        goto fail; 
+        goto fail;
     }
     /* Open socket stream */
     r->file = fdopen(r->fd, "w+");
@@ -57,8 +61,8 @@ Request * accept_request(int sfd) {
 
 fail:
     /* Deallocate request struct */
-    free(r); //maybe call free-request here instead 
-    return NULL;//maybe not return NULL, Emma not sure 
+    free_request(r); //maybe call free-request here instead
+    return NULL;//maybe not return NULL, Emma not sure
 }
 
 /**
@@ -86,7 +90,7 @@ void free_request(Request *r) {
     free (r->uri);
     free(r->path);
     free(r->query);
-    //all of the char * in the Request struct get freed above 
+    //all of the char * in the Request struct get freed above
 
     /* Free headers */
     free(r->headers);
@@ -95,7 +99,6 @@ void free_request(Request *r) {
     free(r);
 }
 
-/* PAST THIS POINT EMMA HASN'T WRITTEN ANYTHING IN HERE */
 
 /**
  * Parse HTTP Request.
@@ -106,10 +109,22 @@ void free_request(Request *r) {
  * This function first parses the request method, any query, and then the
  * headers, returning 0 on success, and -1 on error.
  **/
-int parse_request(Request *r) {
+int parse_request(Request * r) {
     /* Parse HTTP Request Method */
+    parse_request_method(r);
+    char buffer[BUFSIZ];
 
-    /* Parse HTTP Requet Headers*/
+    if(!(fgets(buffer, BUFSIZ, r->file)))  return -1;
+
+
+
+    /*while (fgets(buffer, BUFSIZ, r->file)) {
+      puts(buffer);
+    }*/
+
+    /* Parse HTTP Request Headers*/
+    parse_request_headers(r);
+    parse_request_method(r);
     return 0;
 }
 
@@ -137,10 +152,18 @@ int parse_request_method(Request *r) {
     char *query;
 
     /* Read line from socket */
+    while (fgets(buffer, BUFSIZ, r->file)) {
+      puts(buffer);
 
     /* Parse method and uri */
+    r->method = strtok(buffer, " \t\n");
+    r->uri = strtok(NULL, " \t\n");
 
     /* Parse query from uri */
+    r->query = strchr(r->uri, '?') + 1;    // Check later on
+    //strchr(r->uri, '?') = NULL;            // Taking query out of URI
+
+
 
     /* Record method, uri, and query in request struct */
     debug("HTTP METHOD: %s", r->method);
@@ -152,6 +175,7 @@ int parse_request_method(Request *r) {
 fail:
     return -1;
 }
+} // Might not go here
 
 /**
  * Parse HTTP Request Headers.
@@ -197,6 +221,7 @@ int parse_request_headers(Request *r) {
 
 fail:
     return -1;
+
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

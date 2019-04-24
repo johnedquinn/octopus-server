@@ -27,10 +27,11 @@ Status handle_error(Request *request, Status status);
  *
  * On error, handle_error should be used with an appropriate HTTP status code.
  **/
-Status  handle_request(Request *r) {
+Status  handle_request(Request * r) {
     Status result;
 
     /* Parse request */
+    parse_request(r);
 
     /* Determine request path */
     debug("HTTP REQUEST PATH: %s", r->path);
@@ -52,15 +53,30 @@ Status  handle_request(Request *r) {
  * If the path cannot be opened or scanned as a directory, then handle error
  * with HTTP_STATUS_NOT_FOUND.
  **/
-Status  handle_browse_request(Request *r) {
+Status  handle_browse_request(Request * r) {
     struct dirent **entries;
     int n;
 
     /* Open a directory for reading or scanning */
+    n = scandir(r->path, &entries, NULL, NULL);
+
+    if (n < 0){
+      fprintf(stderr, " Error: unable to scan directory: %s\n", strerror(errno));
+      return EXIT_FAILURE;
+    }
+    if(entries == NULL){
+      fprintf(stderr, "Error: failed to open entries: %s\n", strerror(errno));
+      return EXIT_FAILURE;
+    }
 
     /* Write HTTP Header with OK Status and text/html Content-Type */
+    //maybe -sk
+    fprintf(r->file, "HTTP/1.0 200 OK\n");
+	  fprintf(r->file, "Content-Type: text/html\n");
+    fprintf(r->file, "\r\n");
 
     /* For each entry in directory, emit HTML list item */
+    //use ul
 
     /* Flush socket, return OK */
     return HTTP_STATUS_OK;
