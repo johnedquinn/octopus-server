@@ -28,24 +28,37 @@ int parse_request_headers(Request *r);
  * The returned request struct must be deallocated using free_request.
  **/
 Request * accept_request(int sfd) {
-    Request *r;
+    Request *r = calloc (1, sizeof(Request));
     struct sockaddr raddr;
-    socklen_t rlen;
+    socklen_t rlen = sizeof(struct sockaddr);
 
     /* Allocate request struct (zeroed) */
+    //this is the first line of the function 
 
     /* Accept a client */
-
+    r->fd = accept(sfd, &raddr, &rlen);
+    if(r->fd <0){
+        fprintf(stderr, "Unable to accept: %s\n", strerror(errno));
+        goto fail;
+    }
     /* Lookup client information */
-
+    if(getnameinfo(&raddr, rlen, &r->host[NI_MAXHOST], sizeof(r->host[NI_MAXHOST]), &r->port[NI_MAXHOST], sizeof(r->port[NI_MAXHOST]), NI_NUMERICHOST|NI_NUMERICSERV) != 0){
+        fprintf(stderr, "Unable to get client info: %s\n", strerror(errno));
+        goto fail; 
+    }
     /* Open socket stream */
-
+    r->file = fdopen(r->fd, "w+");
+    if(!r->file){
+        fprintf(stderr, "Unable to fdopen: %s\n", strerror(errno));
+        close(r->fd);
+    }
     log("Accepted request from %s:%s", r->host, r->port);
     return r;
 
 fail:
     /* Deallocate request struct */
-    return NULL;
+    free(r); //maybe call free-request here instead 
+    return NULL;//maybe not return NULL, Emma not sure 
 }
 
 /**
@@ -66,13 +79,23 @@ void free_request(Request *r) {
     }
 
     /* Close socket or fd */
+    close(r->fd); //closing the fd
 
     /* Free allocated strings */
+    free(r->method);
+    free (r->uri);
+    free(r->path);
+    free(r->query);
+    //all of the char * in the Request struct get freed above 
 
     /* Free headers */
+    free(r->headers);
 
     /* Free request */
+    free(r);
 }
+
+/* PAST THIS POINT EMMA HASN'T WRITTEN ANYTHING IN HERE */
 
 /**
  * Parse HTTP Request.

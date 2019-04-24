@@ -102,7 +102,8 @@ int main(int argc, char * argv []) {
     debug("ConcurrencyMode = %s", mode == SINGLE ? "Single" : "Forking");
 
     /* Start either forking or single HTTP server */
-    return status;
+   // return status;
+   return 0; //just did this so it would compile
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

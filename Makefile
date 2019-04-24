@@ -1,5 +1,5 @@
 CC=		gcc
-CFLAGS=		-g -Wall -Werror -std=gnu99 -Iinclude
+CFLAGS=		-g -Wall  -std=gnu99 -Iinclude #I took out -Werror so we could compile intermediately
 LD=		gcc
 LDFLAGS=	-L.
 AR=		ar
@@ -16,12 +16,13 @@ clean:
 
 # TO_DO: Add rules for bin/spidey, lib/libspidey.a, and any intermediate objects
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $^
 	@echo "Compiling $@..."
+	$(CC) $(CFLAGS) -c -o $@ $^
 
 lib/libspidey.a: src/forking.o src/handler.o src/request.o src/single.o src/socket.o src/utils.o
-	$(AR) $(ARFLAGS) $^
 	@echo "Linking $@..."
+	$(AR) $(ARFLAGS) $^
 
 bin/spidey: src/spidey.o lib/libspidey.a
+	@echo "Linking $@..."
 	$(CC) $(LDFLAGS) -o $@ $^
