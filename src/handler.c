@@ -34,17 +34,26 @@ Status  handle_request(Request * r) {
 
     /* Parse request */
     if(parse_request(r)); //this returns 0 if it works 
-        return EXIT_FAILURE;
+        return HTTP_STATUS_BAD_REQUEST; 
 
     //Determine the request path 
     r->path = determine_request_path(r->uri); //that function isn't written yet, but it should do it 
-
-    if( stat(r->path, buf) < 0){
-        result = handle_error(r, result);  
+    if( stat(r->path, buf)< 0){ //if it fails 
+        return HTTP_STATUS_INTERNAL_SERVER_ERROR;  
     }
+    else
+        handle_browse_request(r); 
+ 
+    if ( access(r->path, X_OK) < 0 )
+        return HTTP_STATUS_NOT_FOUND; 
+    else
+        handle_cgi_request(r);
 
-    if ( access(r->path, 0) < 0 ) //access takes a mode, I don't know what that mode should be 
-        result = handle_error(r, result); 
+    if( access(r->path, R_OK) < 0 )
+        return HTTP_STATUS_NOT_FOUND;
+    else
+        handle_file_request(r); 
+
     /* Determine request path */
     debug("HTTP REQUEST PATH: %s", r->path);
 
@@ -112,7 +121,9 @@ Status  handle_file_request(Request *r) {
     size_t nread;
 
     /* Open file for reading */
-
+    r->file = fdopen(r->fd, "r+");
+    if(!(r->file))
+        close(r->fd);
     /* Determine mimetype */
 
     /* Write HTTP Headers with OK status and determined Content-Type */
