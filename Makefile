@@ -21,7 +21,7 @@ clean:
 
 lib/libspidey.a: src/forking.o src/handler.o src/request.o src/single.o src/socket.o src/utils.o
 	@echo "Linking $@..."
-	$(AR) $(ARFLAGS) $^
+	$(AR) $(ARFLAGS) $@ $^
 
 bin/spidey: src/spidey.o lib/libspidey.a
 	@echo "Linking $@..."

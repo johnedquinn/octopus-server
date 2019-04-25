@@ -82,7 +82,7 @@ int socket_listen(const char * port) {
   /* release allocated address info */
   //not sure if we need to check here
   if (server_fd < 0) {
-    fprintf(stderr, "Server does not exist: %s\n", sterror(errno));
+    fprintf(stderr, "Server does not exist: %s\n", strerror(errno));
     return server_fd; //changed that from EXIT_FAILURE
   }
   freeaddrinfo(results);
