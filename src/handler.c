@@ -27,32 +27,34 @@ Status handle_error(Request *request, Status status);
  *
  * On error, handle_error should be used with an appropriate HTTP status code.
  **/
-Status  handle_request(Request * r) {
+Status handle_request(Request * r) {
     /* so result isn't getting set to anything really. I'm not confident in much of this it's just an idea -Emma */
     Status result;
-    struct stat *buf;
+    struct stat buf;
 
     /* Parse request */
     if(parse_request(r)); //this returns 0 if it works 
-        return HTTP_STATUS_BAD_REQUEST; 
+        return handle_error(r, HTTP_STATUS_BAD_REQUEST);
 
     //Determine the request path 
     r->path = determine_request_path(r->uri); //that function isn't written yet, but it should do it 
-    if( stat(r->path, buf)< 0){ //if it fails 
-        return HTTP_STATUS_INTERNAL_SERVER_ERROR;  
+    if (stat(r->path, &buf) < 0) { //if it fails 
+        return handle_error(r, HTTP_STATUS_INTERNAL_SERVER_ERROR);
     }
-    else
-        handle_browse_request(r); 
- 
-    if ( access(r->path, X_OK) < 0 )
-        return HTTP_STATUS_NOT_FOUND; 
-    else
-        handle_cgi_request(r);
 
-    if( access(r->path, R_OK) < 0 )
-        return HTTP_STATUS_NOT_FOUND;
-    else
-        handle_file_request(r); 
+    if (S_ISDIR((&buf)->st_mode)) {
+        result = handle_browse_request(r);
+    } else if (S_ISREG((&buf)->st_mode)) {
+        if (access(r->path, X_OK)) {
+            result = handle_cgi_request(r);
+        } else if (access(r->path, R_OK)) {
+            result = handle_file_request(r);
+        } else {
+            result = handle_error(r, HTTP_STATUS_NOT_FOUND);
+        }
+    } else {
+        result = handle_error(r, HTTP_STATUS_NOT_FOUND);
+    }
 
     /* Determine request path */
     debug("HTTP REQUEST PATH: %s", r->path);
@@ -62,6 +64,19 @@ Status  handle_request(Request * r) {
 
     return result;
 }
+
+/*
+stat (&buf)
+if is_dirbuf->st_mode
+    handle broswer
+else if is_reg
+    if acces s_OK
+        cgi
+    else if rok
+        file request
+    else
+        handle error with status not found
+*/
 
 /**
  * Handle browse request.
