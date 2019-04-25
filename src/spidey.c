@@ -20,7 +20,7 @@ char * RootPath	      = "www";
  * @param   progname    Program Name
  * @param   status      Exit status.
  */
-void usage(const char *progname, int status) {
+void usage(const char * progname, int status) {
     fprintf(stderr, "Usage: %s [hcmMpr]\n", progname);
     fprintf(stderr, "Options:\n");
     fprintf(stderr, "    -h            Display help message\n");
@@ -87,14 +87,17 @@ bool parse_options(int argc, char * argv [], ServerMode * mode) {
  **/
 int main(int argc, char * argv []) {
     ServerMode mode;
+    char * buff[BUFSIZ];
 
     /* Parse command line options */
     parse_options(argc, argv, &mode);
 
     /* Listen to server socket */
-    
+    int sfd = socket_listen(Port);
 
     /* Determine real RootPath */
+    RootPath = realpath(RootPath, *buff);
+
     log("Listening on port %s", Port);
     debug("RootPath        = %s", RootPath);
     debug("MimeTypesPath   = %s", MimeTypesPath);
@@ -102,7 +105,14 @@ int main(int argc, char * argv []) {
     debug("ConcurrencyMode = %s", mode == SINGLE ? "Single" : "Forking");
 
     /* Start either forking or single HTTP server */
-   // return status;
+    /*if (mode == SINGLE)
+        single_server(sfd);
+    else if (mode == FORKING)
+        forking_server(sfd);
+    else
+        return EXIT_FAILURE;*/
+    single_server(sfd);
+
    return 0; //just did this so it would compile
 }
 
