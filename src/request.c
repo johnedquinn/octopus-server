@@ -117,11 +117,6 @@ int parse_request(Request * r) {
     if(!(fgets(buffer, BUFSIZ, r->file)))  return -1;
 
 
-
-    /*while (fgets(buffer, BUFSIZ, r->file)) {
-      puts(buffer);
-    }*/
-
     /* Parse HTTP Request Headers*/
     parse_request_headers(r);
     parse_request_method(r);
@@ -147,22 +142,22 @@ int parse_request(Request * r) {
  **/
 int parse_request_method(Request *r) {
     char buffer[BUFSIZ];
-    char *method;
-    char *uri;
-    char *query;
+    char *uri; //used for splitting up the uri into uri and query 
 
     /* Read line from socket */
-    while (fgets(buffer, BUFSIZ, r->file)) {
-      puts(buffer);
+    /*while (fgets(buffer, BUFSIZ, r->file)) { //will break out of the loop if the file doesn't exist, that's when we want it to fail
+      puts(buffer);*/
+    if(!fgets(buffer, BUFSIZ, r->file)) goto fail; //this would happen if the file didn't exist, Emma thinks while loop isn't necessary 
 
     /* Parse method and uri */
-    r->method = strtok(buffer, " \t\n");
-    r->uri = strtok(NULL, " \t\n");
+    r->method = strdup(strtok(buffer, " \t\n")); //need to strdup to allocate mem
+    uri = strtok(NULL, " \t\n");
 
     /* Parse query from uri */
-    r->query = strchr(r->uri, '?') + 1;    // Check later on
-    //strchr(r->uri, '?') = NULL;            // Taking query out of URI
-
+    r->query = strdup(strchr(uri, '?') + 1);
+    char * enduri = strchr(uri, '?');           // Taking query out of URI
+    enduri = NULL;
+    r->uri = strdup(uri); //allocating memory for the correct uri
 
 
     /* Record method, uri, and query in request struct */
@@ -175,7 +170,7 @@ int parse_request_method(Request *r) {
 fail:
     return -1;
 }
-} // Might not go here
+
 
 /**
  * Parse HTTP Request Headers.

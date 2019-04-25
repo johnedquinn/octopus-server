@@ -28,11 +28,23 @@ Status handle_error(Request *request, Status status);
  * On error, handle_error should be used with an appropriate HTTP status code.
  **/
 Status  handle_request(Request * r) {
+    /* so result isn't getting set to anything really. I'm not confident in much of this it's just an idea -Emma */
     Status result;
+    struct stat *buf;
 
     /* Parse request */
-    parse_request(r);
+    if(parse_request(r)); //this returns 0 if it works 
+        return EXIT_FAILURE;
 
+    //Determine the request path 
+    r->path = determine_request_path(r->uri); //that function isn't written yet, but it should do it 
+
+    if( stat(r->path, buf) < 0){
+        result = handle_error(r, result);  
+    }
+
+    if ( access(r->path, 0) < 0 ) //access takes a mode, I don't know what that mode should be 
+        result = handle_error(r, result); 
     /* Determine request path */
     debug("HTTP REQUEST PATH: %s", r->path);
 

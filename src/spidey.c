@@ -92,7 +92,7 @@ int main(int argc, char * argv []) {
     parse_options(argc, argv, &mode);
 
     /* Listen to server socket */
-    //
+    
 
     /* Determine real RootPath */
     log("Listening on port %s", Port);
