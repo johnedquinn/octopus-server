@@ -64,11 +64,11 @@ char * determine_mimetype(const char *path) {
  * string must later be free'd.
  **/
 char * determine_request_path(const char *uri) {
-    char buf[BUFSIZ]; 
+    char buf[BUFSIZ];
     char path[BUFSIZ];
     char * rpath;
     sprintf(buf, "%s%s", RootPath, uri);
-    rpath = realpath(buf, path); 
+    rpath = realpath(buf, path);
     if(!rpath){ //error checking for real path
         return NULL;
     }
@@ -95,7 +95,7 @@ const char * http_status_string(Status status) {
         "418 I'm A Teapot",
     };
 
-    return NULL;
+    return StatusStrings[status];
 }
 
 /**

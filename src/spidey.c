@@ -90,18 +90,24 @@ int main(int argc, char * argv []) {
     char buff[BUFSIZ];
 
     /* Parse command line options */
-    if(!parse_options(argc, argv, &mode))
+    if(!parse_options(argc, argv, &mode)) {
+        fprintf(stderr, "Unable to parse: %s\n", strerror(errno));
         return EXIT_FAILURE;
+    }
 
     /* Listen to server socket */
     int sfd = socket_listen(Port);
-    if (sfd == -1) //returns -1 when something fails 
+    if (sfd == -1) {//returns -1 when something fails
+        fprintf(stderr, "Couldn't listen to socket: %s\n", strerror(errno));
         return EXIT_FAILURE;
+    }
 
     /* Determine real RootPath */
     RootPath = realpath(RootPath, buff);
-    if (!RootPath)
+    if (!RootPath) {
+        fprintf(stderr, "Rootpath unable to be specified: %s\n", strerror(errno));
         return EXIT_FAILURE; //real path returns null if it fails
+    }
 
     log("Listening on port %s", Port);
     debug("RootPath        = %s", RootPath);
@@ -116,9 +122,9 @@ int main(int argc, char * argv []) {
         forking_server(sfd);
     else
         return EXIT_FAILURE;*/
-    single_server(sfd);
+    int status = single_server(sfd);
 
-   return 0; //just did this so it would compile
+   return status;
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

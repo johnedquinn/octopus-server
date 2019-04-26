@@ -21,13 +21,13 @@ int single_server(int sfd) {
         if (!request)
             return EXIT_FAILURE;
 	/* Handle request */
-        Status status =  handle_request(request); 
+        Status status =  handle_request(request);
 	/* Free request */
-        free_request(request); 
+        free_request(request);
     }
 
     /* Close server socket */
-    close(sfd); 
+    close(sfd);
     return EXIT_SUCCESS;
 }
 
