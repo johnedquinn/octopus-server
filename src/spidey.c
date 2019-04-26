@@ -87,16 +87,21 @@ bool parse_options(int argc, char * argv [], ServerMode * mode) {
  **/
 int main(int argc, char * argv []) {
     ServerMode mode;
-    char * buff[BUFSIZ];
+    char buff[BUFSIZ];
 
     /* Parse command line options */
-    parse_options(argc, argv, &mode);
+    if(!parse_options(argc, argv, &mode))
+        return EXIT_FAILURE;
 
     /* Listen to server socket */
     int sfd = socket_listen(Port);
+    if (sfd == -1) //returns -1 when something fails 
+        return EXIT_FAILURE;
 
     /* Determine real RootPath */
-    RootPath = realpath(RootPath, *buff);
+    RootPath = realpath(RootPath, buff);
+    if (!RootPath)
+        return EXIT_FAILURE; //real path returns null if it fails
 
     log("Listening on port %s", Port);
     debug("RootPath        = %s", RootPath);

@@ -28,7 +28,6 @@ Status handle_error(Request *request, Status status);
  * On error, handle_error should be used with an appropriate HTTP status code.
  **/
 Status handle_request(Request * r) {
-    /* so result isn't getting set to anything really. I'm not confident in much of this it's just an idea -Emma */
     Status result;
     struct stat buf;
 
@@ -37,7 +36,7 @@ Status handle_request(Request * r) {
         return handle_error(r, HTTP_STATUS_BAD_REQUEST);
 
     //Determine the request path 
-    r->path = determine_request_path(r->uri); //that function isn't written yet, but it should do it 
+    r->path = determine_request_path(r->uri);  
     if (stat(r->path, &buf) < 0) { //if it fails 
         return handle_error(r, HTTP_STATUS_INTERNAL_SERVER_ERROR);
     }

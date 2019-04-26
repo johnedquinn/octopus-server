@@ -39,6 +39,7 @@ char * determine_mimetype(const char *path) {
     FILE *fs = NULL;
 
     /* Find file extension */
+    ext = strrchr(path, '.'); //returns pointer to first period in the path
 
     /* Open MimeTypesPath file */
 
@@ -64,9 +65,17 @@ char * determine_mimetype(const char *path) {
  **/
 char * determine_request_path(const char *uri) {
     char buf[BUFSIZ]; 
+    char path[BUFSIZ];
+    char * rpath;
     sprintf(buf, "%s%s", RootPath, uri);
-    
-    return NULL;
+    rpath = realpath(buf, path); 
+    if(!rpath){ //error checking for real path
+        return NULL;
+    }
+    if (strncmp(RootPath, rpath, strlen(RootPath))) //if the real path doesn't start with the RootPath
+        return NULL;
+
+    return rpath;
 }
 
 /**
