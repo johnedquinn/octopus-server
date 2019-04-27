@@ -40,6 +40,7 @@ Status handle_request(Request * r) {
 
     //Determine the request path
     r->path = determine_request_path(r->uri);
+    fprintf(stderr, "HANDLER.C: The r->path is: %s\n", r->path);
     if (stat(r->path, &buf) < 0) { //if it fails
         return handle_error(r, HTTP_STATUS_INTERNAL_SERVER_ERROR);
     }
@@ -47,9 +48,9 @@ Status handle_request(Request * r) {
     if (S_ISDIR(buf.st_mode)) {
         result = handle_browse_request(r);
     } else if (S_ISREG(buf.st_mode)) {
-        if (access(r->path, X_OK)) {
+        if (!access(r->path, X_OK)) {
             result = handle_cgi_request(r);
-        } else if (access(r->path, R_OK)) {
+        } else if (!access(r->path, R_OK)) {
             result = handle_file_request(r);
         } else {
             result = handle_error(r, HTTP_STATUS_NOT_FOUND);
@@ -66,19 +67,6 @@ Status handle_request(Request * r) {
 
     return result;
 }
-
-/*
-stat (&buf)
-if is_dirbuf->st_mode
-    handle broswer
-else if is_reg
-    if acces s_OK
-        cgi
-    else if rok
-        file request
-    else
-        handle error with status not found
-*/
 
 /**
  * Handle browse request.
@@ -120,10 +108,12 @@ Status  handle_browse_request(Request * r) {
     /* For each entry in directory, emit HTML list item */
     //use ul
     fprintf(r->file, "<ul>\n");
+    fprintf(stderr, "Current r->uri: %s\n", r->uri);
     for (int i = 0; i < n; i++) {
-      fprintf(r->file, "<li><a href=\"#\">%s</a></li>\n", entries[i]->d_name);
+      fprintf(r->file, "<li><a href=\"%s/%s\">%s</a></li>\n", streq(r->uri, "/") ? "" : r->uri, entries[i]->d_name, entries[i]->d_name);
       free(entries[i]);
     }
+
     fprintf(r->file, "</ul>\n");
     free(entries);
 
@@ -160,16 +150,44 @@ Status  handle_file_request(Request *r) {
         close(r->fd);
     }
     /* Determine mimetype */
-
+    mimetype = determine_mimetype(r->path);
+    if (mimetype == NULL){
+      fprintf(stderr, "NULL mimetype returned");
+      goto fail;
+    }
     /* Write HTTP Headers with OK status and determined Content-Type */
+    fprintf(stderr, "Mimetype: %s\n", mimetype);
+    fprintf(r->file, "HTTP/1.0 200 OK\n");
+	  fprintf(r->file, "Content-Type: %s\n", mimetype);
+    fprintf(r->file, "\r\n");
 
     /* Read from file and write to socket in chunks */
+    char * uri_path = determine_request_path(r->uri);
+    fprintf(stderr, "This is the r->uri: %s\n", uri_path);
+    fs = fopen(uri_path, "r+");
+    if (fs == NULL){
+      fprintf(stderr,"Unable to open the URI: %s\n", strerror(errno));
+      goto fail;
+    }
+    while (nread = fread(buffer, sizeof(char), BUFSIZ, fs)){
+      if(fwrite( buffer , sizeof(char), nread, r->file) != nread){
+        fprintf(stderr, "Some read items not written: %s\n", strerror(errno));
+        goto fail;
+      }
+    }
 
     /* Close file, flush socket, deallocate mimetype, return OK */
+    fflush(r->file);
+    free(mimetype);
+    fclose(fs);
+    fclose(r->file);
     return HTTP_STATUS_OK;
 
 fail:
     /* Close file, free mimetype, return INTERNAL_SERVER_ERROR */
+    free(mimetype);
+    fclose(fs);
+    fclose(r->file);
     return HTTP_STATUS_INTERNAL_SERVER_ERROR;
 }
 

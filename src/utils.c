@@ -31,7 +31,7 @@
  *
  * This function returns an allocated string that must be free'd.
  **/
-char * determine_mimetype(const char *path) {
+char * determine_mimetype(const char * path) {
     char *ext;
     char *mimetype;
     char *token;
@@ -40,11 +40,35 @@ char * determine_mimetype(const char *path) {
 
     /* Find file extension */
     ext = strrchr(path, '.'); //returns pointer to first period in the path
+    if (ext == NULL) {
+      fprintf(stderr, "Unable to get file extension\n");
+      return DefaultMimeType;
+    }
+    ext = ext + 1; //move past the period
+    fprintf(stderr, "The file extension: \"%s\"\n", ext);
 
     /* Open MimeTypesPath file */
+    fs = fopen(MimeTypesPath, "r");
+    if (fs == NULL) {
+      fprintf(stderr, "Cannot open MimeTypesPath file: %s\n", strerror(errno) );
+      return strdup(DefaultMimeType);
+    }
 
     /* Scan file for matching file extensions */
-    return NULL;
+    while (fgets(buffer, BUFSIZ, fs)) {
+      if (strlen(buffer) > 1) {
+          mimetype = strtok(buffer, WHITESPACE);
+          token = strtok(NULL, "\n");
+          if (!token) continue;
+          token = skip_whitespace(token);
+          token = strtok(token, WHITESPACE);
+          if(streq(token,ext)) { return strdup(mimetype); }
+          while (token = strtok(NULL, WHITESPACE)) {
+              if(streq(token,ext)) { return strdup(mimetype); }
+          }
+      }
+    }
+    return strdup(DefaultMimeType);
 }
 
 /**
@@ -72,6 +96,7 @@ char * determine_request_path(const char *uri) {
     if(!rpath){ //error checking for real path
         return NULL;
     }
+    rpath = strdup(rpath);
     if (strncmp(RootPath, rpath, strlen(RootPath))) //if the real path doesn't start with the RootPath
         return NULL;
 
@@ -115,6 +140,10 @@ char * skip_nonwhitespace(char *s) {
  * @return  Point to first non-whitespace character in s.
  **/
 char * skip_whitespace(char *s) {
+    for (char * let = s; let; let++){
+      if (*let != ' ' && *let != '\t')
+        return let;
+    }
     return s;
 }
 

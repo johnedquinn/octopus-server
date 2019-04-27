@@ -89,7 +89,7 @@ void free_request(Request *r) {
     /* Free allocated strings */
     free(r->method);
     free (r->uri);
-    //free(r->path);
+    free(r->path);
     free(r->query);
     //all of the char * in the Request struct get freed above
 
@@ -154,6 +154,7 @@ int parse_request_method(Request *r) {
     /*while (fgets(buffer, BUFSIZ, r->file)) { //will break out of the loop if the file doesn't exist, that's when we want it to fail
       puts(buffer);*/
     if(!fgets(buffer, BUFSIZ, r->file)) goto fail; //this would happen if the file didn't exist, Emma thinks while loop isn't necessary
+    fprintf(stderr, "REQUEST.c: Here's the buffer: \"%s\"\n", buffer);
 
     /* Parse method and uri */
     r->method = strdup(strtok(buffer, " \t\n")); //need to strdup to allocate mem
@@ -168,8 +169,7 @@ int parse_request_method(Request *r) {
       r->query = strdup("");
     }
     //end_uri = NULL;
-    r->uri = strdup(strtok(uri, "?")); //allocating memory for the correct uri
-
+    r->uri = strdup(strtok(uri, "? \t\n")); //allocating memory for the correct uri
 
     /* Record method, uri, and query in request struct */
     debug("HTTP METHOD: %s", r->method);
