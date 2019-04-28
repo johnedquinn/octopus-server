@@ -1,0 +1,83 @@
+/*
+ * Filename: index_style.css
+ * Author: John E Quinn
+ * Git Project: personalWebsite
+ *
+ * Description: NA
+ * Notes: SET TABSTOP=2 FOR CORRECT INDENTATION
+ */
+
+ .header, .thoughtsHeader {
+	position: relative;
+	height: 600px;
+	background-size: cover;
+	background-position: center;
+}
+
+.header {
+	/*background-image: url(./../images/indexFront.jpg);*/
+	background-color: #323339;
+}
+
+.thoughtsHeader {
+	/*background-image: url(./../images/thoughtsFront.jpg);*/
+	background-color: #DEECFF;
+}
+
+.header h1 {
+	font-size: 60px;
+}
+
+.overlay {
+	position: absolute;
+	min-height: 100%;
+	min-width: 100%;
+	left: 0;
+	top: 0;
+	background: rgba(0, 0, 0, 0.65);
+}
+
+.description {
+	position: absolute;
+	top: 25%;
+	margin: auto;
+	padding: 2em;
+}
+
+.description h1 {
+	color: #fff;	
+}
+
+.thoughtsDescription {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: auto;
+	transform: translate(-50%, -50%);
+	padding: 2em;
+	text-align: center;
+}
+
+.thoughtsDescription h1, p{
+	color: #F5F5F5;
+}
+
+.thoughtsDescription  p{
+	font-size: small;
+}
+
+#firstArticle {
+	background-image: url(/assets/images/thoughtsFront.jpg);
+}
+
+.card-body p {
+	color: #455D7A;
+}
+
+.bg-transparent {
+	background-color: transparent;
+}
+
+.navbar {
+	position: relative;
+}
