@@ -113,7 +113,9 @@ Status  handle_browse_request(Request * r) {
     fprintf(r->file, "\r\n");
 
     /* For each entry in directory, emit HTML list item */
-    fprintf(r->file, "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\">\n");
+    fprintf(r->file, "<!DOCTYPE html>");
+    fprintf(r->file, "<head><link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\"></head>\n");
+    fprintf(r->file, "<body>");
     fprintf(r->file, "<div class=\"jumbotron\"><h1>Directory: %s</h1><p>Just take a look around. Maybe you'll find some interesting stuff.</p></div>", r->uri);
     fprintf(r->file, "<div class=\"container\"><ul class=\"list-group\">\n");
     for (int i = 1; i < n; i++) {
@@ -121,6 +123,7 @@ Status  handle_browse_request(Request * r) {
       free(entries[i]);
     }
     fprintf(r->file, "</ul></div>\n");
+    fprintf(r->file, "</body>");
 
     /* Flush socket, return OK */
     free(entries[0]);
@@ -297,9 +300,11 @@ Status handle_error(Request * r, Status status) {
     FILE * error_file = fopen(error_path, "r");
     free(error_path);
     if (error_file == NULL){
-      fprintf(stderr,"Unable to open the html: %s\n", strerror(errno));
-      fclose(r->file);
-      return status;
+        fprintf(stderr,"Unable to open the html: %s\n", strerror(errno));
+        fprintf(r->file, "<h1>WRONG TURN</h1>\n");
+        fprintf(r->file, "<h2>%s</h2>\n", status_string);
+        fclose(r->file);
+        return status;
     }
 
     char buffer[BUFSIZ]; int nread;
