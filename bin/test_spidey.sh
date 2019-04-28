@@ -68,6 +68,7 @@ grep_count() {
 
 check_hrefs() {
     if [ "$(sed -En 's/.*href="([^"]+)".*/\1/p' $WORKSPACE/test | sort | paste -s -d ,)" != $1 ]; then
+  echo "$(sed -En 's/.*href="([^"]+)".*/\1/p' $WORKSPACE/test | sort | paste -s -d ,)" # ADDED BY JQ
 	echo "FAILURE: hrefs != $1" > $WORKSPACE/test
 	return 1;
     fi

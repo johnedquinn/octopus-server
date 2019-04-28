@@ -19,15 +19,38 @@
  **/
 int forking_server(int sfd) {
     /* Accept and handle HTTP request */
+    Request * r;
+    Status    status;
+
+
     while (true) {
-    	/* Accept request */
 
-	/* Ignore children */
+      /* Accept request */
+      r = accept_request(sfd);
+      if (!(r)) continue;
 
-	/* Fork off child process to handle request */
+      /* Ignore children */
+      signal(SIGCHLD, SIG_IGN);
+
+      /* Fork off child process to handle request */
+      pid_t pid = fork();
+
+      if (pid < 0) {
+          fprintf(stderr, "Unable to fork: %s\n", strerror(errno));
+          free_request(r);
+      } else if (pid == 0) {
+          close(sfd);
+          status = handle_request(r);
+          exit(status);
+      } else {
+          free_request(r);
+      }
+
     }
 
     /* Close server socket */
+    close(sfd);
+
     return EXIT_SUCCESS;
 }
 

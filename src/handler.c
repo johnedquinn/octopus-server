@@ -29,8 +29,6 @@ Status handle_error(Request *request, Status status);
  **/
 Status handle_request(Request * r) {
 
-    puts("IN HANDLE REQUEST");
-
     Status result;
     struct stat buf;
 
@@ -38,13 +36,15 @@ Status handle_request(Request * r) {
     if(parse_request(r)) //this returns 0 if it works
         return handle_error(r, HTTP_STATUS_BAD_REQUEST);
 
-    //Determine the request path
-    r->path = determine_request_path(r->uri);
-    fprintf(stderr, "HANDLER.C: The r->path is: %s\n", r->path);
+    /* Determine the request path */
+    if (!(r->path = determine_request_path(r->uri))) return handle_error(r, HTTP_STATUS_NOT_FOUND);
+
+    /*  */
     if (stat(r->path, &buf) < 0) { //if it fails
         return handle_error(r, HTTP_STATUS_INTERNAL_SERVER_ERROR);
     }
 
+    /* Determine what function should handle request */
     if (S_ISDIR(buf.st_mode)) {
         result = handle_browse_request(r);
     } else if (S_ISREG(buf.st_mode)) {
@@ -81,8 +81,6 @@ Status handle_request(Request * r) {
  **/
 Status  handle_browse_request(Request * r) {
 
-    puts("IN HANDLE BROWSE REQUEST");
-
     struct dirent **entries;
     int n;
 
@@ -91,33 +89,42 @@ Status  handle_browse_request(Request * r) {
 
     if (n < 0){
       fprintf(stderr, " Error: unable to scan directory: %s\n", strerror(errno));
+      //free(entries);
       return handle_error(r, HTTP_STATUS_NOT_FOUND);
     }
-    if(entries == NULL){
+    if (entries == NULL){
       fprintf(stderr, "Error: failed to open entries: %s\n", strerror(errno));
       return handle_error(r, HTTP_STATUS_NOT_FOUND);
     }
 
-    /* Write HTTP Header with OK Status and text/html Content-Type */
-    //maybe -sk
-    r->file = fdopen(r->fd, "w+");
+    /* Open file */
+    if (!(r->file = fdopen(r->fd, "w+"))) {
+        for (int i = 0; i < n; i++) {
+          free(entries[i]);
+        }
+        free(entries);
+        return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    }
+
+
+    /* Print HTTP Protocol */
     fprintf(r->file, "HTTP/1.0 200 OK\n");
 	  fprintf(r->file, "Content-Type: text/html\n");
     fprintf(r->file, "\r\n");
 
     /* For each entry in directory, emit HTML list item */
-    //use ul
-    fprintf(r->file, "<ul>\n");
-    fprintf(stderr, "Current r->uri: %s\n", r->uri);
-    for (int i = 0; i < n; i++) {
-      fprintf(r->file, "<li><a href=\"%s/%s\">%s</a></li>\n", streq(r->uri, "/") ? "" : r->uri, entries[i]->d_name, entries[i]->d_name);
+    fprintf(r->file, "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\">\n");
+    fprintf(r->file, "<div class=\"jumbotron\"><h1>Directory: %s</h1><p>Just take a look around. Maybe you'll find some interesting stuff.</p></div>", r->uri);
+    fprintf(r->file, "<div class=\"container\"><ul class=\"list-group\">\n");
+    for (int i = 1; i < n; i++) {
+      fprintf(r->file, "<button type=\"button\" class=\"list-group-item list-group-item-action\"><a href=\"%s/%s\">%s</a></button>\n", streq(r->uri, "/") ? "" : r->uri, entries[i]->d_name, entries[i]->d_name);
       free(entries[i]);
     }
-
-    fprintf(r->file, "</ul>\n");
-    free(entries);
+    fprintf(r->file, "</ul></div>\n");
 
     /* Flush socket, return OK */
+    free(entries[0]);
+    free(entries);
     fflush(r->file);
     fclose(r->file);
     return HTTP_STATUS_OK;
@@ -135,8 +142,6 @@ Status  handle_browse_request(Request * r) {
  * HTTP_STATUS_NOT_FOUND.
  **/
 Status  handle_file_request(Request *r) {
-
-    puts("IN HANDLE FILE REQUEST");
 
     FILE *fs;
     char buffer[BUFSIZ];
@@ -163,15 +168,19 @@ Status  handle_file_request(Request *r) {
 
     /* Read from file and write to socket in chunks */
     char * uri_path = determine_request_path(r->uri);
-    fprintf(stderr, "This is the r->uri: %s\n", uri_path);
-    fs = fopen(uri_path, "r+");
+    //fprintf(stderr, "This is the r->uri: %s\n", uri_path);
+    fs = fopen(uri_path, "r");
     if (fs == NULL){
+      free(uri_path);
       fprintf(stderr,"Unable to open the URI: %s\n", strerror(errno));
       goto fail;
     }
-    while (nread = fread(buffer, sizeof(char), BUFSIZ, fs)){
+
+    while ((nread = fread(buffer, sizeof(char), BUFSIZ, fs))){
       if(fwrite( buffer , sizeof(char), nread, r->file) != nread){
         fprintf(stderr, "Some read items not written: %s\n", strerror(errno));
+        fclose(fs);
+        free(uri_path);
         goto fail;
       }
     }
@@ -181,12 +190,12 @@ Status  handle_file_request(Request *r) {
     free(mimetype);
     fclose(fs);
     fclose(r->file);
+    free(uri_path);
     return HTTP_STATUS_OK;
 
 fail:
     /* Close file, free mimetype, return INTERNAL_SERVER_ERROR */
     free(mimetype);
-    fclose(fs);
     fclose(r->file);
     return HTTP_STATUS_INTERNAL_SERVER_ERROR;
 }
@@ -203,9 +212,8 @@ fail:
  * If the path cannot be popened, then handle error with
  * HTTP_STATUS_INTERNAL_SERVER_ERROR.
  **/
-Status  handle_cgi_request(Request *r) {
+Status  handle_cgi_request(Request * r) {
 
-    puts("IN HANDLE CGI REQUEST");
 
     FILE *pfs;
     char buffer[BUFSIZ];
@@ -214,12 +222,39 @@ Status  handle_cgi_request(Request *r) {
      * http://en.wikipedia.org/wiki/Common_Gateway_Interface */
 
     /* Export CGI environment variables from request headers */
+    if (setenv("QUERY_STRING", r->query, true) != 0) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    if (setenv("DOCUMENT_ROOT", RootPath, true) != 0) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    if (setenv("REMOTE_ADDR", r->host, true) != 0) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    if (setenv("REMOTE_PORT", r->port, true) != 0) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    if (setenv("REQUEST_METHOD", r->method, true) != 0) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    if (setenv("REQUEST_URI", r->uri, true) != 0) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    if (setenv("SCRIPT_FILENAME", r->path, true) != 0) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    if (setenv("SERVER_PORT", Port, true) != 0) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    for (struct header * head = r->headers->next; head; head = head->next) {
+        if (streq("Host", head->name)) {
+            if (setenv("HTTP_HOST", head->value, true) != 0) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+        }
+        if (streq("User-Agent", head->name)) {
+            if (setenv("HTTP_USER_AGENT", head->value, true) != 0) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
+        }
+    }
 
-    /* POpen CGI Script */
+
+
+    /* Popen CGI Script */
+    if (!(pfs = popen(r->path, "r"))) return HTTP_STATUS_BAD_REQUEST;
 
     /* Copy data from popen to socket */
+    r->file = fdopen(r->fd, "w+");
+    if (!r->file) return HTTP_STATUS_INTERNAL_SERVER_ERROR;
 
+    while (fgets(buffer, BUFSIZ, pfs)) {
+      fputs(buffer, r->file);
+    }
     /* Close popen, flush socket, return OK */
+    pclose(pfs);
+    fflush(r->file);
+    fclose(r->file);
     return HTTP_STATUS_OK;
 }
 
@@ -232,26 +267,53 @@ Status  handle_cgi_request(Request *r) {
  * This writes an HTTP status error code and then generates an HTML message to
  * notify the user of the error.
  **/
-Status  handle_error(Request *r, Status status) {
-
-    puts("IN HANDLE ERROR");
+Status handle_error(Request * r, Status status) {
 
     const char * status_string = http_status_string(status);
 
     /* Write HTTP Header */
-    r->file = fdopen(r->fd, "w+");
+    if (!(r->file = fdopen(r->fd, "w+"))) return status;
     fprintf(r->file, "HTTP/1.0 %s\n", status_string);
     fprintf(r->file, "Content-Type: text/html\n");
     fprintf(r->file, "\r\n");
 
-    fprintf(r->file, "<h1>SUCK ONE</h1>\n");
-    fprintf(r->file, "<h2>HTTP STATUS STRING: %s<h2>\n", status_string);
+    /* Determine what HTML File should be opened */
+    char * error_path;
+    switch (status) {
+        case (HTTP_STATUS_BAD_REQUEST):
+            error_path = determine_request_path("/html/error_400.html");
+            break;
+        case (HTTP_STATUS_NOT_FOUND):
+            error_path = determine_request_path("/html/error_404.html");
+            break;
+        case (HTTP_STATUS_INTERNAL_SERVER_ERROR):
+            error_path = determine_request_path("/html/error_500.html");
+            break;
+        default:
+            error_path = determine_request_path("/html/error_404.html");
+            break;
+    }
 
-    fflush(r->file);
-    fclose(r->file);
-    /* Write HTML Description of Error*/
+    FILE * error_file = fopen(error_path, "r");
+    free(error_path);
+    if (error_file == NULL){
+      fprintf(stderr,"Unable to open the html: %s\n", strerror(errno));
+      fclose(r->file);
+      return status;
+    }
+
+    char buffer[BUFSIZ]; int nread;
+    while ((nread = fread(buffer, sizeof(char), BUFSIZ, error_file))){
+      if(fwrite(buffer , sizeof(char), nread, r->file) != nread){
+        fprintf(stderr, "Some read items not written: %s\n", strerror(errno));
+        fclose(error_file);
+        fclose(r->file);
+      }
+    }
 
     /* Return specified status */
+    fflush(r->file);
+    fclose(r->file);
     return status;
 }
 

@@ -1,5 +1,5 @@
 CC=		gcc
-CFLAGS=		-g -std=gnu99 -Iinclude #I took out -Werror and -Wallso we could compile intermediately
+CFLAGS=		-g -Werror -Wall -std=gnu99 -Iinclude
 LD=		gcc
 LDFLAGS=	-L.
 AR=		ar

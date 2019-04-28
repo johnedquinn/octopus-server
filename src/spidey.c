@@ -116,13 +116,13 @@ int main(int argc, char * argv []) {
     debug("ConcurrencyMode = %s", mode == SINGLE ? "Single" : "Forking");
 
     /* Start either forking or single HTTP server */
-    /*if (mode == SINGLE)
-        single_server(sfd);
+    Status status;
+    if (mode == SINGLE)
+        status = single_server(sfd);
     else if (mode == FORKING)
-        forking_server(sfd);
+        status = forking_server(sfd);
     else
-        return EXIT_FAILURE;*/
-    int status = single_server(sfd);
+        return EXIT_FAILURE;
 
    return status;
 }

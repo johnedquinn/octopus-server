@@ -58,12 +58,14 @@ char * determine_mimetype(const char * path) {
     while (fgets(buffer, BUFSIZ, fs)) {
       if (strlen(buffer) > 1) {
           mimetype = strtok(buffer, WHITESPACE);
+          if(!mimetype) continue;
           token = strtok(NULL, "\n");
           if (!token) continue;
           token = skip_whitespace(token);
           token = strtok(token, WHITESPACE);
+          if(!token) continue;
           if(streq(token,ext)) { return strdup(mimetype); }
-          while (token = strtok(NULL, WHITESPACE)) {
+          while ((token = strtok(NULL, WHITESPACE))) {
               if(streq(token,ext)) { return strdup(mimetype); }
           }
       }
@@ -87,18 +89,19 @@ char * determine_mimetype(const char * path) {
  * Otherwise, return a newly allocated string containing the real path.  This
  * string must later be free'd.
  **/
-char * determine_request_path(const char *uri) {
+char * determine_request_path(const char * uri) {
     char buf[BUFSIZ];
     char path[BUFSIZ];
     char * rpath;
+
+    /* Make real path */
     sprintf(buf, "%s%s", RootPath, uri);
     rpath = realpath(buf, path);
-    if(!rpath){ //error checking for real path
-        return NULL;
-    }
-    rpath = strdup(rpath);
-    if (strncmp(RootPath, rpath, strlen(RootPath))) //if the real path doesn't start with the RootPath
-        return NULL;
+    if(!rpath) return NULL;
+    if (!(rpath = strdup(rpath))) return NULL;
+
+    /* Check if real path doesn't start with RootPath */
+    if (strncmp(RootPath, rpath, strlen(RootPath))) return NULL;
 
     return rpath;
 }
@@ -112,7 +115,7 @@ char * determine_request_path(const char *uri) {
  * http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
  **/
 const char * http_status_string(Status status) {
-    static char *StatusStrings[] = {
+    static char * StatusStrings[] = {
         "200 OK",
         "400 Bad Request",
         "404 Not Found",
