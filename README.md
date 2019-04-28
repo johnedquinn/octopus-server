@@ -15,4 +15,4 @@ This project contains a spectacular web server created by the Members below. It 
 [Emma Ascolese]: https://gitlab.com/emmaascolese
 [Final Project]: https://www3.nd.edu/~pbui/teaching/cse.20289.sp19/project.html
 [CSE 20289 Systems Programming (Spring 2019)]: https://www3.nd.edu/~pbui/teaching/cse.20289.sp19/
-[johnedquinn.com]: www.johnedquinn.com
+[johnedquinn.com]: https://www.johnedquinn.com
