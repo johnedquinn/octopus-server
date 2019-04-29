@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <!--
 * Filename: index.html
 * Author: John E Quinn
@@ -13,13 +13,13 @@
 <!-- HEAD GENERAL INFORMATION (INDEX) -->
 
 <head>
-	<title>John Ed Quinn</title>
+	<title>Projects | John Ed Quinn</title>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="/assets/css/index_style.css">
-	<!--<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>-->
 </head>
 
 
@@ -28,14 +28,11 @@
 <body>
 
 
-
 	<!-- HEADER -->
-	<header class="thoughtsHeader">
-
-		<div class="overlay"></div> <!-- Used to darken background image -->
+	<header class="header work-header">
 
 		<!-- NAVIGATION BAR -->
-		<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+		<nav class="navbar navbar-expand-lg navbar-light bg-transparent">
 			<a class="navbar-brand col-2" href="#">John Ed Quinn</a>
 			<ul class="navbar-nav justify-content-end col-10">
 				<li class="nav-item px-2">
@@ -53,9 +50,9 @@
 		<!-- The HEADER text -->
 		<div class="container">
 			<div class="thoughtsDescription">
-				<h1>Just some thoughts</h1>
-				<p>written in code, reduced to 0's and 1's, stored in a remote location, spawned by you, displayed as
-					images and text streams, becoming an eternal piece of history.</p>
+				<h1 class="text-dark">What I've Worked on</h1>
+				<p class="text-dark">Here you can find my projects, articles, playlists -- basically anything that I
+					think is worth looking at. I'd add me on Spotify if I were you, but that's just me.</p>
 			</div>
 		</div>
 
@@ -63,23 +60,37 @@
 
 
 	<!-- CONTENT -->
-	<div class="container">
-		<div class="row">
-
-			<div class="col-md-4">
-				<div class="card mb-4 shadow-sm">
-					<img class="card-img-top" src="/assets/images/indexFront.jpg" alt="Card image cap">
+	<div class="col bg-dark">
+		<div class="row py-3"></div>
+		<div class="row py-3">
+			<div class="col-1"></div>
+			<div class="col-10">
+				<div class="card text-center">
 					<div class="card-body">
-						<h5>How this all started</h5>
-						<p>Looking into how I started Computer Science and how it changed my life.</p>
-						<a href="#" class="btn btn-primary">Read article</a>
+						<h5 class="card-title text-dark">DiscreetOctupus: This Server and Website</h5>
+						<p>RWVqw vrqvw qervnkqr weivneq rivnokqv rwvjnqeio wisvdonqe svddj rvjf nvqernfiwe
+							rvjn. sdvw WEVf wG Vwre gweG WREG Wegwe G Eg eGEW g ef qegW WEGEgf qEGWGweg ewGE
+							gweGWE G Eg ewGWeggegEWG wegeg E g ew GWEgwe ge g GEW G REAGWEG WEGEWG hrsh erhaerh
+							5ehaerhe herher hstdh erdherdh edrherd herhaerh erhareh hrherh rrsh rah erah arhe wag</p>
+						<a class="btn btn-primary" rel="noopener noreferrer" target="_blank"
+							href="https://gitlab.com/johnedquinn/discreet-octupus">View The Source Code</a>
 					</div>
 				</div>
 			</div>
-
-
+			<div class="col-1"></div>
 		</div>
+		<div class="row py-3"></div>
 	</div>
+
+	<div class="col bg-light" id="cards-area">
+	</div>
+
+
+	<script src="/assets/js/projects.js"></script>
+	<script>get_projects('/assets/json/projects.json');</script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </body>
 
