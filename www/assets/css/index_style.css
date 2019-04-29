@@ -9,19 +9,16 @@
 
  .header, .thoughtsHeader {
 	position: relative;
-	height: 600px;
-	background-size: cover;
+	height: 100vh;
 	background-position: center;
 }
 
 .header {
-	/*background-image: url(./../images/indexFront.jpg);*/
-	background-color: #323339;
+	background-image: url("/assets/images/indexFront.jpg");
 }
 
 .thoughtsHeader {
-	/*background-image: url(./../images/thoughtsFront.jpg);*/
-	background-color: #DEECFF;
+	background-image: url("/assets/images/thoughtsFront.jpg");
 }
 
 .header h1 {
@@ -34,7 +31,7 @@
 	min-width: 100%;
 	left: 0;
 	top: 0;
-	background: rgba(0, 0, 0, 0.65);
+	background: rgba(0, 0, 0, 0.8);
 }
 
 .description {
@@ -44,7 +41,7 @@
 	padding: 2em;
 }
 
-.description h1 {
+.description h1, h3, h5 {
 	color: #fff;	
 }
 
@@ -80,4 +77,24 @@
 
 .navbar {
 	position: relative;
+}
+
+.footer {
+	background-color: rgb(50, 51, 58);
+}
+
+.text-dark {
+	color: black;
+}
+
+.text-light {
+	color: white;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.extra-small {
+	font-size: 8px;
 }
