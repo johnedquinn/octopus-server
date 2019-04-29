@@ -1,0 +1,16 @@
+{
+    "projects": [
+        {
+            "name": "First Website",
+            "type": "GitLab Project",
+            "description": "Here's a 1 description.",
+            "link": "https://gitlab.com/johnedquinn"
+        },
+        {
+            "name": "Second Website",
+            "type": "GitLab Project",
+            "description": "Here's a 2 description.",
+            "link": "https://gitlab.com/johnedquinn"
+        }
+    ]
+}
