@@ -17,6 +17,10 @@
 	font-size: 60px;
 }
 
+.index-card {
+	height: 100%;
+}
+
 .index-header {
 	background-image: url("/assets/images/paddle_board.jpg");
 }
