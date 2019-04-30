@@ -1,16 +1,39 @@
 {
     "projects": [
         {
-            "name": "First Website",
+            "name": "CSE 20289 Systems Programming Assignments",
             "type": "GitLab Project",
-            "description": "Here's a 1 description.",
-            "link": "https://gitlab.com/johnedquinn"
+            "description": "This is the project for all assignments for the Spring 2019 CSE 20289 course. It contains Shell Scripts, Python Scripts, and C Programs.",
+            "link": "https://gitlab.com/johnedquinn",
+            "imageURL": "https://gitlab.com/uploads/-/system/project/avatar/11871348/gitlab.png?width=64"
         },
         {
-            "name": "Second Website",
+            "name": "Flutter Practice",
             "type": "GitLab Project",
-            "description": "Here's a 2 description.",
-            "link": "https://gitlab.com/johnedquinn"
+            "description": "This project's goal is to develop small apps using Dart and Flutter, in the aims of getting better at quickly launching apps at hackathons.",
+            "link": "https://gitlab.com/johnedquinn/flutter_practice",
+            "imageURL": "https://gitlab.com/uploads/-/system/project/avatar/11563351/Flutter.png?width=64"
+        },
+        {
+            "name": "Moore Center Inventory",
+            "type": "GitLab Project",
+            "description": "Aimed at creating an inventory tracking system for the Moore Pediatric Surgery Center in Guatemala City, Guatemala.",
+            "link": "https://gitlab.com/medicalsquad/moorecenterinventory",
+            "imageURL": "https://gitlab.com/uploads/-/system/project/avatar/10779380/MooreCenter.png?width=64"
+        },
+        {
+            "name": "Fourth Website",
+            "type": "GitLab Project",
+            "description": "Here's a 4 description.",
+            "link": "https://gitlab.com/johnedquinn",
+            "imageURL": "/assets/images/paddle_board.jpg"
+        },
+        {
+            "name": "Fifth Website",
+            "type": "GitLab Project",
+            "description": "Here's a 5 description.",
+            "link": "https://gitlab.com/johnedquinn",
+            "imageURL": "/assets/images/paddle_board.jpg"
         }
     ]
 }
