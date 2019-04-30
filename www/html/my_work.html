@@ -2,10 +2,9 @@
 <!--
 * Filename: index.html
 * Author: John E Quinn
-* Git Project: personalWebsite
 *
-* Description: NA
-* Notes: SET TABSTOP=2 FOR CORRECT INDENTATION
+* Description: My Work page.
+* Notes: NA
 -->
 
 <html>
@@ -20,12 +19,13 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="/assets/css/index_style.css">
+	<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
 </head>
 
 
 <!-- BODY OF INDEX -->
 
-<body>
+<body class="bg-light">
 
 
 	<!-- HEADER -->
@@ -67,13 +67,19 @@
 			<div class="col-10">
 				<div class="card text-center">
 					<div class="card-body">
-						<h5 class="card-title text-dark">DiscreetOctupus: This Server and Website</h5>
+						<h5 class="card-title text-dark"><a class="text-dark"
+								href="https://gitlab.com/johnedquinn/discreet-octupus">DiscreetOctupus: This Server and
+								Website</a></h5>
 						<p>RWVqw vrqvw qervnkqr weivneq rivnokqv rwvjnqeio wisvdonqe svddj rvjf nvqernfiwe
 							rvjn. sdvw WEVf wG Vwre gweG WREG Wegwe G Eg eGEW g ef qegW WEGEgf qEGWGweg ewGE
 							gweGWE G Eg ewGWeggegEWG wegeg E g ew GWEgwe ge g GEW G REAGWEG WEGEWG hrsh erhaerh
 							5ehaerhe herher hstdh erdherdh edrherd herhaerh erhareh hrherh rrsh rah erah arhe wag</p>
-						<a class="btn btn-primary" rel="noopener noreferrer" target="_blank"
-							href="https://gitlab.com/johnedquinn/discreet-octupus">View The Source Code</a>
+					</div>
+					<div class="card-footer">
+						<img style="max-height: 5rem; max-width: 1.5rem;" src="/assets/images/GitLab_Favicon.png"
+							alt="GitLab Project">
+						<p class="card-text"><small class="text-muted">GitLab Project | C | Shell | HTML | JS</small>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -83,11 +89,11 @@
 	</div>
 
 	<!-- CARDS -->
-	<div class="row py-3"></div>
-	<div class="container">
-	<div class="col bg-light text-center" id="cards-area"></div>
+	<div class="row py-3 bg-light"></div>
+	<div class="container bg-light">
+		<div class="col bg-light text-center" id="cards-area"></div>
 	</div>
-	<div class="row py-5"></div>
+	<div class="row py-5 bg-light"></div>
 
 	<script src="/assets/js/projects.js"></script>
 	<script>get_projects('/assets/json/projects.json');</script>
@@ -98,32 +104,36 @@
 
 	<!-- FOOTER -->
 	<div class="col footer">
-			<div class="row py-5"></div>
-			<div class="row justify-content-center">
-				<h2 class="text-light">Stay along for the ride</h2>
-			</div>
-			<div class="row">
-				<div class="col">
-					<nav class="navbar navbar-expand-lg bg-transparent justify-content-center">
-						<ul class="navbar-nav">
-							<li class="nav-item px-2">
-								<a class="nav-link text-light" rel="noopener noreferrer" target="_blank" href="https://www.instagram.com/johnedquinn/">Instagram</a>
-							</li>
-							<li class="nav-item px-2">
-								<a class="nav-link text-light" rel="noopener noreferrer" target="_blank" href="https://www.snapchat.com/add/johnquinnn">Snapchat</a>
-							</li>
-							<li class="nav-item px-2">
-								<a class="nav-link text-light" rel="noopener noreferrer" target="_blank" href="https://gitlab.com/johnedquinn">GitLab</a>
-							</li>
-							<li class="nav-item px-2">
-								<a class="nav-link text-light" rel="noopener noreferrer" target="_blank" href="johnedquinn@gmail.com">Email</a>
-							</li>
-						</ul>
-					</nav>
-				</div>
-			</div>
-			<div class="row py-5"></div>
+		<div class="row py-5"></div>
+		<div class="row justify-content-center">
+			<h2 class="text-light">Stay along for the ride</h2>
 		</div>
+		<div class="row">
+			<div class="col">
+				<nav class="navbar navbar-expand-lg bg-transparent justify-content-center">
+					<ul class="navbar-nav">
+						<li class="nav-item px-2">
+							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank"
+								href="https://www.instagram.com/johnedquinn/">Instagram</a>
+						</li>
+						<li class="nav-item px-2">
+							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank"
+								href="https://www.snapchat.com/add/johnquinnn">Snapchat</a>
+						</li>
+						<li class="nav-item px-2">
+							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank"
+								href="https://gitlab.com/johnedquinn">GitLab</a>
+						</li>
+						<li class="nav-item px-2">
+							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank"
+								href="johnedquinn@gmail.com">Email</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<div class="row py-5"></div>
+	</div>
 
 </body>
 

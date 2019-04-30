@@ -2,10 +2,9 @@
 <!--
 * Filename: index.html
 * Author: John E Quinn
-* Git Project: personalWebsite
 *
-* Description: NA
-* Notes: SET TABSTOP=2 FOR CORRECT INDENTATION
+* Description: Home page.
+* Notes: NA
 -->
 
 <html>
@@ -19,6 +18,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="/assets/css/index_style.css">
+	<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
 </head>
 
 
@@ -30,7 +30,8 @@
 	<!-- HEADER -->
 	<header class="header index-header">
 
-		<div class="overlay"></div> <!-- Used for darkening the background image -->
+		<!-- Darken the background image -->
+		<div class="overlay"></div>
 
 		<!-- NAVIGATION BAR -->
 		<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
@@ -64,9 +65,10 @@
 	<div class="col">
 		<div class="row py-4"></div>
 		<div class="row py-3">
+
 			<div class="col-1"></div>
 			<div class="col-6">
-				<div class="card">
+				<div class="card index-card">
 					<div class="card-body">
 						<h5 class="card-title text-dark">What I Currently Do</h5>
 						<p>I am a full-time student whose passion is building beautiful things from makefiles
@@ -85,10 +87,11 @@
 				</div>
 			</div>
 			<div class="col-4">
-				<div class="card">
+				<div class="card index-card">
 					<div class="card-body">
 						<h5 class="card-title text-dark">Relevant Coursework</h5>
-						<p>Here are some (not all) of the courses that I thought were most interesting while at university.</p>
+						<p>Here are some (not all) of the courses that I thought were most interesting while at
+							university.</p>
 					</div>
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item">Systems Programming</li>
@@ -101,11 +104,12 @@
 				</div>
 			</div>
 			<div class="col-1"></div>
+
 		</div>
 		<div class="row py-3">
 			<div class="col-1"></div>
 			<div class="col-4">
-				<div class="card">
+				<div class="card index-card">
 					<div class="card-body">
 						<h5 class="card-title text-dark">Experience</h5>
 						<p>RWVqw vrqvw qervnkqr weivneq rivnokqv rwvjnqeio wisvdonqe svddj rvjf nvqernfiwe rvjn.</p>
@@ -113,17 +117,19 @@
 				</div>
 			</div>
 			<div class="col-6">
-				<div class="card">
+				<div class="card index-card">
 					<div class="card-body">
 						<h5 class="card-title text-dark">This Website</h5>
-						<p>As part of my Spring 2019 Systems Programming class, a group of 3 of us were tasked with creating a
+						<p>As part of my Spring 2019 Systems Programming class, a group of 3 of us were tasked with
+							creating a
 							web server (the very server which is feeding your requests) and a hammering client.
 							As you can tell, you needed to parse through the server's directories to reach this site,
 							but nevertheless you arrived.</p>
-						<p>The server was built using C and was given the name DiscreetOctupus. She's a little rough on the
+						<p>The server was built using C and was given the name DiscreetOctupus. She's a little rough on
+							the
 							edges, but she can sure ride the waves.</p>
-						<a class="btn btn-primary" rel="noopener noreferrer" target="_blank" href="https://gitlab.com/johnedquinn/cse-20289-sp19-project">The Original Project</a>
-						<a class="btn btn-primary" rel="noopener noreferrer" target="_blank" href="https://gitlab.com/johnedquinn/discreet-octupus">The Cooler Project</a>
+						<p class="card-text"><small class="text-muted"><a class="text-dark"
+									href="/html/my_work.html">Learn more</a></small></p>
 					</div>
 				</div>
 			</div>
@@ -132,7 +138,7 @@
 		<div class="row py-3">
 			<div class="col-1"></div>
 			<div class="col-10">
-				<div class="card">
+				<div class="card index-card">
 					<div class="card-body">
 						<h5 class="card-title text-dark">What I Want to Do</h5>
 						<p>RWVqw vrqvw qervnkqr weivneq rivnokqv rwvjnqeio wisvdonqe svddj rvjf nvqernfiwe rvjn.</p>
@@ -162,7 +168,8 @@
 					</div>
 					<div class="card-body">
 						<h5 class="card-title text-dark">Some randome text right here</h5>
-						<p class="card-text">ERweV WEv erbs stbsertn rbsenbs aehehes gearheh steh tsh eth ae h atahhaeths tsstsrn</p>
+						<p class="card-text">ERweV WEv erbs stbsertn rbsenbs aehehes gearheh steh tsh eth ae h
+							atahhaeths tsstsrn</p>
 						<a href="#" class="btn btn-primary">Go somewhere</a>
 					</div>
 				</div>
@@ -183,16 +190,20 @@
 				<nav class="navbar navbar-expand-lg bg-transparent justify-content-center">
 					<ul class="navbar-nav">
 						<li class="nav-item px-2">
-							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank" href="https://www.instagram.com/johnedquinn/">Instagram</a>
+							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank"
+								href="https://www.instagram.com/johnedquinn/">Instagram</a>
 						</li>
 						<li class="nav-item px-2">
-							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank" href="https://www.snapchat.com/add/johnquinnn">Snapchat</a>
+							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank"
+								href="https://www.snapchat.com/add/johnquinnn">Snapchat</a>
 						</li>
 						<li class="nav-item px-2">
-							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank" href="https://gitlab.com/johnedquinn">GitLab</a>
+							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank"
+								href="https://gitlab.com/johnedquinn">GitLab</a>
 						</li>
 						<li class="nav-item px-2">
-							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank" href="johnedquinn@gmail.com">Email</a>
+							<a class="nav-link text-light" rel="noopener noreferrer" target="_blank"
+								href="johnedquinn@gmail.com">Email</a>
 						</li>
 					</ul>
 				</nav>
