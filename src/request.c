@@ -171,13 +171,10 @@ int parse_request_method(Request *r) {
     } else {
       r->query = strdup("");
     }
-    //end_uri = NULL;
+
+    /* Determine URI */
     if (!(uri = strtok(uri, "? \t\n"))) goto fail;
-		if (strcmp(r->uri, "/") == 0) {
-			r->uri = strdup("/html/index.html");
-		} else {
-    	r->uri = strdup(uri); //allocating memory for the correct uri
-		}
+    r->uri = determine_uri(uri);
     if(!r->uri) goto fail;
 
     /* Record method, uri, and query in request struct */
