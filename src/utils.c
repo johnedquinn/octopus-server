@@ -90,6 +90,7 @@ char * determine_mimetype(const char * path) {
  * string must later be free'd.
  **/
 char * determine_request_path(const char * uri) {
+    fprintf(stderr, "--- INPUT PATH = %s\n", uri);
     char buf[BUFSIZ];
     char path[BUFSIZ];
     char * rpath;
@@ -104,6 +105,23 @@ char * determine_request_path(const char * uri) {
     if (strncmp(RootPath, rpath, strlen(RootPath))) return NULL;
 
     return rpath;
+}
+
+/// Function: determine_uri
+/// Description: Returns a dynamically allocated string that corresponds ...
+/// ... to the correct uri.
+char * determine_uri(const char * input) {
+    char * output;
+    if (strcmp(input, "/") == 0) {
+        output = strdup("/html/index.html");
+    } else if (strcmp(input, "/work") == 0) {
+        output = strdup("/html/my_work.html");
+    } else if (strcmp(input, "/contact") == 0) {
+        output = strdup("/html/contact.html");
+    } else {
+        output = strdup(input);
+    }
+    return output;
 }
 
 /**

@@ -94,6 +94,7 @@ int	    socket_listen(const char *port);
 
 char *	    determine_mimetype(const char *path);
 char *	    determine_request_path(const char *uri);
+char * determine_uri(const char * input);
 const char *http_status_string(Status status);
 char *	    skip_nonwhitespace(char *s);
 char *	    skip_whitespace(char *s);
