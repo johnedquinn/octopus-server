@@ -14,7 +14,6 @@ clean:
 
 .PHONY:		all test clean
 
-# TO_DO: Add rules for bin/spidey, lib/libspidey.a, and any intermediate objects
 %.o: %.c
 	@echo "Compiling $@..."
 	$(CC) $(CFLAGS) -c -o $@ $^

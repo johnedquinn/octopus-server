@@ -173,7 +173,11 @@ int parse_request_method(Request *r) {
     }
     //end_uri = NULL;
     if (!(uri = strtok(uri, "? \t\n"))) goto fail;
-    r->uri = strdup(uri); //allocating memory for the correct uri
+		if (strcmp(r->uri, "/") == 0) {
+			r->uri = strdup("/html/index.html");
+		} else {
+    	r->uri = strdup(uri); //allocating memory for the correct uri
+		}
     if(!r->uri) goto fail;
 
     /* Record method, uri, and query in request struct */
