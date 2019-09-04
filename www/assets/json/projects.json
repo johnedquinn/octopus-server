@@ -8,10 +8,10 @@
             "imageURL": "/assets/images/GitLab_Favicon.png"
         },
         {
-            "name": "Flutter Practice",
+            "name": "Iron Chapel*",
             "type": "GitLab Project | Dart | Flutter",
-            "description": "This project's goal is to develop small apps using Dart and Flutter, in the aims of getting better at quickly launching apps at hackathons.",
-            "link": "https://gitlab.com/johnedquinn/flutter_practice",
+            "description": "This project's goal is to develop a scalable iOS/Android application using Dart, Flutter, and Google's Firstore, in the aims of tracking weight-lifting progress.",
+            "link": "https://gitlab.com/johnedquinn/iron-chapel",
             "imageURL": "/assets/images/GitLab_Favicon.png"
         },
         {
@@ -29,24 +29,24 @@
             "imageURL": "/assets/images/Spotify_Favicon.png"
         },
         {
-            "name": "Moore Center Inventory (on-going)",
-            "type": "GitLab Project | jQuery | HTML",
-            "description": "Aimed at creating an inventory tracking system for the Moore Pediatric Surgery Center in Guatemala City, Guatemala.",
-            "link": "https://gitlab.com/medicalsquad/moorecenterinventory",
-            "imageURL": "/assets/images/GitLab_Favicon.png"
-        },
-        {
-            "name": "Data Structures (on-going)",
+            "name": "Data Structures*",
             "type": "GitLab Project | C++",
             "description": "A personal attempt at practicing the Data Structures encountered in my Spring 2019 CSE 20312 course.",
             "link": "https://gitlab.com/johnedquinn/datastructures",
             "imageURL": "/assets/images/GitLab_Favicon.png"
         },
         {
-            "name": "Music Transfer (on-going)",
+            "name": "Music Transfer*",
             "type": "GitLab Project | Python",
             "description": "An attempt at opening Apple Music playlists, parsing the JSON, taking all the song information, and creating Spotify playlists using the Spotipy API.",
             "link": "https://gitlab.com/johnedquinn/musictransfer",
+            "imageURL": "/assets/images/GitLab_Favicon.png"
+        },
+        {
+            "name": "Personal Bin",
+            "type": "GitLab Project | Shell | Python",
+            "description": "This project contains the executables in my PATH that make my life easier.",
+            "link": "https://gitlab.com/johnedquinn/personal-bin",
             "imageURL": "/assets/images/GitLab_Favicon.png"
         },
         {
