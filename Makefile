@@ -25,3 +25,6 @@ lib/libspidey.a: src/forking.o src/handler.o src/request.o src/single.o src/sock
 bin/spidey: src/spidey.o lib/libspidey.a
 	@echo "Linking $@..."
 	$(CC) $(LDFLAGS) -o $@ $^
+
+deploy:
+	sudo setcap CAP_NET_BIND_SERVICE=+eip ./bin/spidey
