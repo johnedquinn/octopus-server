@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+* Filename: my_work.html
+* Author: John E Quinn
+*
+* Description: My Work page.
+* Notes: NA
+-->
+
+<html>
+
+<!-- HEAD GENERAL INFORMATION (INDEX) -->
+
+<head>
+	<title>Quotes | John Ed Quinn</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+	<link rel="preload" as="image" href="/assets/images/work.jpeg">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="/assets/css/index_style.css">
+	<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+</head>
+
+
+<!-- BODY OF INDEX -->
+
+<body class="bg-light">
+
+    <!--<div class="container" style="height: 20vh; position: relative;">
+        <h1 style="position: absolute; top: 50%; font-size: 300%;">Quotes</h1>
+        <h1 class="text-center my-auto">Quotes</h1>
+    </div>-->
+    <div class="container">
+    <div class="row py-4"></div>
+        <h1 class="my-auto mx-auto text-center" style="font-size: 500%;">Favorite Quotes</h1>
+        <p class="card-text mx-auto text-center"><small class="text-muted">Big ideas are kept alive by writing them down.</small></p>
+    <div class="row py-1"></div>
+    </div>
+</div>
+
+    <div class="container bg-light">
+        <div class="col bg-light text-center" id="cards-area"></div>
+    </div>
+
+	<script src="/assets/js/quotes.js"></script>
+	<script>get_quotes('/assets/json/quotes.json');</script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <div class="row py-5"></div>
+
+
+</body>
+
+</html>
